@@ -68,6 +68,8 @@ const MainScreen = () => {
     } else {
         return (
             <div>
+                <div style={{fontWeight:"bold"}}>[ ☀️ 🌤 ☁️ 🌧 ⛈ 🌨 🌦 🌪 🌡 ]</div>
+                <div>[ Refresh to change location ]</div>
                 <div>Latitude: {latitude} Longitude: {longitude}</div>
                 <div>Country: {country}</div>
                 <div>Location: {location}</div>
@@ -77,13 +79,6 @@ const MainScreen = () => {
             </div>
         );
     }
-
-    // return (
-    //     <div>
-    //         <div>Welcome to weather anime</div>
-    //         <button onClick={() => displayScreen()}>Weather Today</button>
-    //     </div>
-    // );
 }
 
 export default MainScreen

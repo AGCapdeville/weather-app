@@ -1,41 +1,47 @@
 import styled from "styled-components";
 
-export const MainDayStyle = styled.div`
+export const MainDayCard = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap');  
     font-family: 'Roboto', sans-serif;  
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 150px;
+    width: 10rem;
     height: 100vh;
     font-weight: bold;
     background-color: yellow;
     color: black;
 `;
 
-export const DayStyle = styled.div`
+export const DayCard = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap'); 
     font-family: 'Roboto', sans-serif;   
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100px;
+    width: 10rem;
     height: 100vh;
     font-weight: bold;
-    color: hsl(0,0%,40%);
+    color: #a2a2a2;
+`;
+
+export const DayCardTop = styled.div`
+    margin-top: 5rem;
+    width: auto;
+    position: relative;
 `;
 
 export const DayTitle = styled.div`
     font-size: 1.5rem;
-    margin-top: 5rem;
 `;
+
+// margin-top: 50px;
 
 export const DayNumber = styled.div`
     font-size: 4rem;
 `;
 
 export const WeatherIcon = styled.div`
-    font-size: 5rem;
 `;
 
 export const WeekContainer = styled.div`

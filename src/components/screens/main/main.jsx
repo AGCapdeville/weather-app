@@ -2,7 +2,9 @@
 import { updateScreen } from '../../../ducks/screen';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { WeekContainer, DayStyle, DayTitle, DayNumber, MainDayStyle, WeatherIcon} from "./mainStyle";
+import { WeekContainer, DayCard, DayTitle, DayNumber, MainDayCard, DayCardTop, WeatherIcon} from "./mainStyle";
+
+import {cloudyBlack, cloudyGrey} from '../../../images';
 
 const { WEATHER_API_KEY } = require('../../../config');
 
@@ -149,30 +151,7 @@ const MainScreen = () => {
             )
 
         setWeekdays([getDay(-1), getDay(0), getDay(1), getDay(2), getDay(3), getDay(4), getDay(5)])
-
         
-        // doAjax()
-        //     .then(
-        //         (result) => {
-        //             // console.log(result);
-        //             // setLocation(result['name'] ? result['name'] : 'Unknown');
-        //             // setCountry(result['sys']['country'] ? result['sys']['country'] : 'Unknown');
-        //             // setWeather(result['weather'][0]['main']);
-        //             // setFeelsLike(result['main']['feels_like']);
-        //             // setHumidity(result['main']['humidity']);
-        //             // setIsLoaded(true);
-        //         }
-        //     )
-        //     .catch(
-        //         (error) => {
-        //             console.log(error);
-        //             setIsLoaded(true);
-        //             setError(error);
-        //         }
-
-        
-        //     );
-
     }, [])
 
     console.log(weekDaysWeather)
@@ -184,52 +163,38 @@ const MainScreen = () => {
     } else {
         return (
             <div>
-
-                {/* attribute icon */}
-                {/* <a href="https://www.flaticon.com/free-icons/weather" title="weather icons">Weather icons created by Freepik - Flaticon</a> */}
-                
-                {/* <div style={{fontWeight:"bold"}}>[ ☀️ 🌤 ☁️ 🌧 ⛈ 🌨 🌦 🌪 🌡 ]</div>
-                <div>[ Refresh to change location ]</div>
-                <div>Latitude: {latitude} Longitude: {longitude}</div>
-                <div>Country: {country}</div>
-                <div>Location: {location}</div>
-                <div>Weather: {weather}</div>
-                <div>Feels like {feels}</div>
-                <div>Humidity {humidity}</div> */}
-
                 <WeekContainer>
                     {weekDays.map((day, index) => 
                         {
                             if (day == weekDays[1]){
                                 return (
-                                <MainDayStyle>
-                                    <DayTitle>
-                                        {weekdays[day.getDay()]}
-                                    </DayTitle>
-                                    <DayNumber>
-                                        {day.getDate()}
-                                    </DayNumber>
+                                <MainDayCard>
+                                    <DayCardTop>
+                                        <DayTitle>
+                                            {weekdays[day.getDay()]}
+                                        </DayTitle>
+                                        <DayNumber>
+                                            {day.getDate()}
+                                        </DayNumber>
+                                    </DayCardTop>
                                     {weekDaysWeather[index]["weather"][0]["main"]}
-                                    <WeatherIcon>
-                                        {/* {console.log("UTC:" + timeToUTC(getDay(0)))} */}
-                                        {/* {weatherIcons["Clear"]} */}
-                                    </WeatherIcon>
-                                </MainDayStyle>
+                                    <img style={{width:'80px'}} className="weatherIcon" src={cloudyBlack} alt="weatherIcon" />
+                                </MainDayCard>
                                 )
                             } else {
                                 return (
-                                <DayStyle>
-                                    <DayTitle>
-                                        {weekdays[day.getDay()]}
-                                    </DayTitle>
-                                    <DayNumber>
-                                        {day.getDate()}
-                                    </DayNumber>
+                                <DayCard>
+                                    <DayCardTop>
+                                        <DayTitle>
+                                            {weekdays[day.getDay()]}
+                                        </DayTitle>
+                                        <DayNumber>
+                                            {day.getDate()}
+                                        </DayNumber>
+                                    </DayCardTop>
                                     {weekDaysWeather[index]["weather"][0]["main"]}
-                                    <WeatherIcon>
-                                        {/* {weatherIcons["Clear"]} */}
-                                    </WeatherIcon>
-                                </DayStyle>
+                                    <img style={{width:'80px'}} className="weatherIcon" src={cloudyGrey} alt="weatherIcon" />
+                                </DayCard>
                                 )
                             }
                         }

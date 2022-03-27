@@ -2,33 +2,50 @@
 import { updateScreen } from '../../../ducks/screen';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { WeekContainer, DayStyle, DayTitle, DayNumber, MainDayStyle, WeatherIcon} from "./mainStyle";
+
 const { WEATHER_API_KEY } = require('../../../config');
 
 const MainScreen = () => {
     const dispatch = useDispatch()
 
-    const [error, setError] = useState(null);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [weather, setWeather] = useState("");
-    const [location, setLocation] = useState("");
-    const [country, setCountry] = useState("");
-    const [feels, setFeelsLike] = useState("");
-    const [humidity, setHumidity] = useState("");
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
 
+    
+    const [error, setError] = useState(null)
+    const [isLoaded, setIsLoaded] = useState(false)
+    const [weekDays, setWeekdays] = useState([])
+    const [weekDaysWeather, setWeekDaysWeather] = useState([])
+
+    const [weather, setWeather] = useState('')
+    const [location, setLocation] = useState('')
+    const [country, setCountry] = useState('')
+    const [feels, setFeelsLike] = useState('')
+    const [humidity, setHumidity] = useState('')
 
     // Ridgecrest lat: 35.624947; long: -117.679637;
-    const latitude =  Math.ceil(Math.random() * 90) * (Math.round(Math.random()) ? 1 : -1)
-    const longitude =  Math.ceil(Math.random() * 180) * (Math.round(Math.random()) ? 1 : -1)
+    // const latitude =  Math.ceil(Math.random() * 90) * (Math.round(Math.random()) ? 1 : -1)
+    // const longitude =  Math.ceil(Math.random() * 180) * (Math.round(Math.random()) ? 1 : -1)
 
-    const apiCall = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + WEATHER_API_KEY + "&units=imperial"
+    // const apiCall = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + WEATHER_API_KEY + '&units=imperial'
     // const displayScreen = () => {
-    //     dispatch(updateScreen("WeatherToday"))
+    //     dispatch(updateScreen('WeatherToday'))
     // }
 
+    const getDay = (delta) => {
+        let date = new Date()
+        const previous = new Date(date.getTime());
+        previous.setDate(date.getDate() + delta);
+        return previous;
+    }
 
-    // Function to do an Ajax call
-    const doAjax = async (apiToCall) => {
-        const response = await fetch(apiToCall); // Generate the Response object
+    const getWeatherForWeek = async (lat, long) => {
+        const apiHistCall = "https://api.openweathermap.org/data/2.5/onecall?lat=" +
+            lat + "&lon=" + long +
+            "&appid=" + WEATHER_API_KEY +
+            "&units=imperial";
+        const response = await fetch(apiHistCall); // Generate the Response object
         if (response.ok) {
             const jsonValue = await response.json(); // Get JSON value from the response body
             return Promise.resolve(jsonValue);
@@ -37,29 +54,128 @@ const MainScreen = () => {
         }
     }
 
+    const getWeatherForYesterday = async (lat, long) => {
+        let date = getDay(-1);
+        let utc = Math.floor(date.getTime() / 1000);
+        console.log(utc)
+        // https://api.openweathermap.org/data/2.5/onecall/timemachine?lat={lat}&lon={lon}&dt={time}&appid={API key}
+        const apiHistCall = "https://api.openweathermap.org/data/2.5/onecall/timemachine?lat=" +
+            lat + "&lon=" + long +
+            "&dt=" + utc +
+            "&appid=" + WEATHER_API_KEY +
+            "&units=imperial";
+        const response = await fetch(apiHistCall); // Generate the Response object
+        if (response.ok) {
+            const jsonValue = await response.json(); // Get JSON value from the response body
+            return Promise.resolve(jsonValue);
+        } else {
+            return Promise.reject('404');
+        }
+    }
+
+    // const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const weekdays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+    const weatherIcons = {
+        'Rain' : '🌧',
+        "Drizzle" : '🌧',
+        'Cloudy' : '☁️',
+        'Clear' : '☀️',
+        'Cloudy' : '🌤',
+        'Thunderstorm' : '⛈',
+        'Overcast' : '🌨'
+    }
+
+    const idToWeather = (id) => {
+        switch (id[0]) {
+            case "2":       
+                return "Thunderstorm";
+            case "3":
+                return "Drizzle";
+            case "5":
+                return "Rain";
+            case "6":
+                return "Snow";
+            case "7":
+                // 701:"Mist", 711:"Smoke", 721:"Haze", 731:"Dust", 741:"Fog",
+                // 751:"Sand", 761:"Dust", 762:"Ash", 771:"Squall", 781:"Tornado"
+                return "Atmosphere";
+            case "8":
+                return id[2] == "0" ? "Clear" : (id[2] == "1" ? "Cloudy" : "Overcast")
+            default:
+                return "Unknown"
+        }
+    }
+
+    // const date = new Date();
+    // let month = months[date.getMonth()];
+    // let month_number = date.getMonth();
+    // let prevWeekday = weekdays[date.getDay() - 1 == -1 ? 6 : date.getDay() - 1]
+    // let weekday = weekdays[date.getDay()];
+
     useEffect(() => {
-        doAjax(apiCall)
+        // setLatitude("35.62");
+        // setLongitude("-117.67");
+        getWeatherForYesterday("35.622540", "-117.676430")
             .then(
-                (result) => {
-                    // console.log(result);
-                    setLocation(result["name"] ? result["name"] : "Unknown");
-                    setCountry(result["sys"]["country"] ? result["sys"]["country"] : "Unknown");
-                    setWeather(result["weather"][0]["main"]);
-                    setFeelsLike(result["main"]["feels_like"]);
-                    setHumidity(result["main"]["humidity"]);
-                    setIsLoaded(true);
-                    console.log(result);
+                (yesterday) => {
+                    console.log("yesterday", yesterday)
+                    console.log(yesterday["current"]["weather"][0]["main"])
+
+                    getWeatherForWeek("35.622540", "-117.676430")
+                        .then(
+                            (week) => {
+                                // console.log('weel:', week);
+                                setWeekDaysWeather([yesterday["current"], week["daily"][0], week["daily"][1], week["daily"][2], week["daily"][3], week["daily"][4], week["daily"][5]])
+                                // let weekWeather = week["daily"];
+                                // console.log("today:",weekWeather[0]["weather"][0]["main"])
+                                // console.log("tommorow:",weekWeather[1]["weather"][0]["main"])
+                                // console.log("day after tommorow:",weekWeather[2]["weather"][0]["main"])
+                                // console.log("week", weekWeather)
+                                // console.log(week["current"]["weather"][0]["main"])
+                                setIsLoaded(true);
+                            }
+                        ).catch(
+                            (error) => {
+                                console.log(error);
+                                // setIsLoaded(true);
+                                // setError(error);
+                            }
+                        )
                 }
-            )
-            .catch(
+            ).catch(
                 (error) => {
                     console.log(error);
-                    setIsLoaded(true);
-                    setError(error);
                 }
-            );
+            )
+
+        setWeekdays([getDay(-1), getDay(0), getDay(1), getDay(2), getDay(3), getDay(4), getDay(5)])
+
+        
+        // doAjax()
+        //     .then(
+        //         (result) => {
+        //             // console.log(result);
+        //             // setLocation(result['name'] ? result['name'] : 'Unknown');
+        //             // setCountry(result['sys']['country'] ? result['sys']['country'] : 'Unknown');
+        //             // setWeather(result['weather'][0]['main']);
+        //             // setFeelsLike(result['main']['feels_like']);
+        //             // setHumidity(result['main']['humidity']);
+        //             // setIsLoaded(true);
+        //         }
+        //     )
+        //     .catch(
+        //         (error) => {
+        //             console.log(error);
+        //             setIsLoaded(true);
+        //             setError(error);
+        //         }
+
+        
+        //     );
 
     }, [])
+
+    console.log(weekDaysWeather)
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -68,14 +184,80 @@ const MainScreen = () => {
     } else {
         return (
             <div>
-                <div style={{fontWeight:"bold"}}>[ ☀️ 🌤 ☁️ 🌧 ⛈ 🌨 🌦 🌪 🌡 ]</div>
+
+                {/* attribute icon */}
+                {/* <a href="https://www.flaticon.com/free-icons/weather" title="weather icons">Weather icons created by Freepik - Flaticon</a> */}
+                
+                {/* <div style={{fontWeight:"bold"}}>[ ☀️ 🌤 ☁️ 🌧 ⛈ 🌨 🌦 🌪 🌡 ]</div>
                 <div>[ Refresh to change location ]</div>
                 <div>Latitude: {latitude} Longitude: {longitude}</div>
                 <div>Country: {country}</div>
                 <div>Location: {location}</div>
                 <div>Weather: {weather}</div>
                 <div>Feels like {feels}</div>
-                <div>Humidity {humidity}</div>
+                <div>Humidity {humidity}</div> */}
+
+                <WeekContainer>
+                    {weekDays.map((day, index) => 
+                        {
+                            if (day == weekDays[1]){
+                                return (
+                                <MainDayStyle>
+                                    <DayTitle>
+                                        {weekdays[day.getDay()]}
+                                    </DayTitle>
+                                    <DayNumber>
+                                        {day.getDate()}
+                                    </DayNumber>
+                                    {weekDaysWeather[index]["weather"][0]["main"]}
+                                    <WeatherIcon>
+                                        {/* {console.log("UTC:" + timeToUTC(getDay(0)))} */}
+                                        {/* {weatherIcons["Clear"]} */}
+                                    </WeatherIcon>
+                                </MainDayStyle>
+                                )
+                            } else {
+                                return (
+                                <DayStyle>
+                                    <DayTitle>
+                                        {weekdays[day.getDay()]}
+                                    </DayTitle>
+                                    <DayNumber>
+                                        {day.getDate()}
+                                    </DayNumber>
+                                    {weekDaysWeather[index]["weather"][0]["main"]}
+                                    <WeatherIcon>
+                                        {/* {weatherIcons["Clear"]} */}
+                                    </WeatherIcon>
+                                </DayStyle>
+                                )
+                            }
+                        }
+                    )}
+                </WeekContainer>
+
+                {/* <div id="weekContainer" style={weekContainer}>
+                    
+                    <div id="prevDay" style={dayStyle}>
+                        <div>
+                            {prevWeekday}
+                        </div>
+                        <div>
+                            {prevDay}
+                        </div>
+                    </div>
+
+                    <div id="today" style={dayStyle}>
+                        <div>
+                            {weekday}
+                        </div>
+                        <div>
+                            {day}
+                        </div>
+                    </div>
+
+                </div> */}
+
             </div>
         );
     }

@@ -14,7 +14,7 @@ function App() {
   const screen = useScreen();
   const Screen = screens[screen];
   return (
-    <div style={{width:"100vw", height:"100vh", backgroundColor:"grey"}}>
+    <div style={{width: "100%", height: "100%", backgroundColor: "black"}}>
       <Screen />
     </div>
   );

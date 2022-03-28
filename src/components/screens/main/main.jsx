@@ -2,7 +2,7 @@
 import { updateScreen } from '../../../ducks/screen';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { WeekContainer, MainDayCard, DayCard, DayTitle, DayNumber, WeatherIcon} from "./mainStyle";
+import { WeekContainer, MainDayCard, DayCard, DayTitle, DayNumber, WeatherIcon, Month} from "./mainStyle";
 
 import {cloudyMain, cloudy} from '../../../images';
 
@@ -126,45 +126,46 @@ const MainScreen = () => {
         return <div>Loading...</div>;
     } else {
         return (
-            <div>
-                <WeekContainer>
-                    {weekDays.map((day, index) => 
-                        {
-                            if (day == weekDays[1]){
-                                return (
-                                    <MainDayCard>
-                                        <DayTitle>
-                                            {weekdays[day.getDay()]}
-                                        </DayTitle>
-                                        <DayNumber>
-                                            {day.getDate()}
-                                        </DayNumber>
-                                        {/* {weekDaysWeather[index]["weather"][0]["main"]} */}
-                                        <WeatherIcon>
-                                            <img style={{width:'80px'}} className="weatherIcon" src={cloudyMain} alt="weatherIcon" />
-                                        </WeatherIcon>
-                                    </MainDayCard>
-                                )
-                            } else {
-                                return (
-                                    <DayCard>
-                                        <DayTitle>
-                                            {weekdays[day.getDay()]}
-                                        </DayTitle>
-                                        <DayNumber>
-                                            {day.getDate()}
-                                        </DayNumber>
-                                        {/* {weekDaysWeather[index]["weather"][0]["main"]} */}
-                                        <WeatherIcon>
-                                            <img style={{width:'80px'}} className="weatherIcon" src={cloudy} alt="weatherIcon" />
-                                        </WeatherIcon>
-                                    </DayCard>
-                                )
-                            }
+            <WeekContainer>
+                {weekDays.map((day, index) => 
+                    {
+                        if (day == weekDays[1]){
+                            return (
+                                <MainDayCard>
+                                    <DayTitle>
+                                        {weekdays[day.getDay()]}
+                                    </DayTitle>
+                                    <DayNumber>
+                                        {day.getDate()}
+                                    </DayNumber>
+                                    {/* {weekDaysWeather[index]["weather"][0]["main"]} */}
+                                    <WeatherIcon>
+                                        <img style={{width:"calc(1vw + 4rem)"}} className="weatherIcon" src={cloudyMain} alt="weatherIcon" />
+                                    </WeatherIcon>
+                                    <Month>
+                                        {day.getMonth() + 1}
+                                    </Month>
+                                </MainDayCard>
+                            )
+                        } else {
+                            return (
+                                <DayCard>
+                                    <DayTitle>
+                                        {weekdays[day.getDay()]}
+                                    </DayTitle>
+                                    <DayNumber>
+                                        {day.getDate()}
+                                    </DayNumber>
+                                    {/* {weekDaysWeather[index]["weather"][0]["main"]} */}
+                                    <WeatherIcon>
+                                        <img style={{width:"calc(1vw + 4rem)"}} className="weatherIcon" src={cloudy} alt="weatherIcon" />
+                                    </WeatherIcon>
+                                </DayCard>
+                            )
                         }
-                    )}
-                </WeekContainer>
-            </div>
+                    }
+                )}
+            </WeekContainer>
         );
     }
 }

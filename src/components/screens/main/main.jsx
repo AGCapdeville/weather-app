@@ -2,7 +2,7 @@
 import { updateScreen } from '../../../ducks/screen';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { WeekContainer, DayCard, DayTitle, DayNumber, MainDayCard, DayCardTop, WeatherIcon} from "./mainStyle";
+import { WeekContainer, MainDayCard, DayCard, DayTitle, DayNumber} from "./mainStyle";
 
 import {cloudyBlack, cloudyGrey} from '../../../images';
 
@@ -120,27 +120,17 @@ const MainScreen = () => {
         getWeatherForYesterday("35.622540", "-117.676430")
             .then(
                 (yesterday) => {
-                    console.log("yesterday", yesterday)
-                    console.log(yesterday["current"]["weather"][0]["main"])
-
+                    // console.log("yesterday", yesterday)
+                    // console.log(yesterday["current"]["weather"][0]["main"])
                     getWeatherForWeek("35.622540", "-117.676430")
                         .then(
                             (week) => {
-                                // console.log('weel:', week);
-                                setWeekDaysWeather([yesterday["current"], week["daily"][0], week["daily"][1], week["daily"][2], week["daily"][3], week["daily"][4], week["daily"][5]])
-                                // let weekWeather = week["daily"];
-                                // console.log("today:",weekWeather[0]["weather"][0]["main"])
-                                // console.log("tommorow:",weekWeather[1]["weather"][0]["main"])
-                                // console.log("day after tommorow:",weekWeather[2]["weather"][0]["main"])
-                                // console.log("week", weekWeather)
-                                // console.log(week["current"]["weather"][0]["main"])
+                                setWeekDaysWeather([yesterday["current"], week["daily"][0], week["daily"][1], week["daily"][2], week["daily"][3], week["daily"][4], week["daily"][5]]);
                                 setIsLoaded(true);
                             }
                         ).catch(
                             (error) => {
                                 console.log(error);
-                                // setIsLoaded(true);
-                                // setError(error);
                             }
                         )
                 }
@@ -151,10 +141,7 @@ const MainScreen = () => {
             )
 
         setWeekdays([getDay(-1), getDay(0), getDay(1), getDay(2), getDay(3), getDay(4), getDay(5)])
-        
     }, [])
-
-    console.log(weekDaysWeather)
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -168,33 +155,29 @@ const MainScreen = () => {
                         {
                             if (day == weekDays[1]){
                                 return (
-                                <MainDayCard id="mainDay">
-                                    <DayCardTop>
+                                    <MainDayCard>
                                         <DayTitle>
                                             {weekdays[day.getDay()]}
                                         </DayTitle>
                                         <DayNumber>
                                             {day.getDate()}
                                         </DayNumber>
-                                    </DayCardTop>
-                                    {weekDaysWeather[index]["weather"][0]["main"]}
-                                    <img style={{width:'80px'}} className="weatherIcon" src={cloudyBlack} alt="weatherIcon" />
-                                </MainDayCard>
+                                        {weekDaysWeather[index]["weather"][0]["main"]}
+                                        <img style={{width:'80px'}} className="weatherIcon" src={cloudyBlack} alt="weatherIcon" />
+                                    </MainDayCard>
                                 )
                             } else {
                                 return (
-                                <DayCard>
-                                    <DayCardTop>
+                                    <DayCard>
                                         <DayTitle>
                                             {weekdays[day.getDay()]}
                                         </DayTitle>
                                         <DayNumber>
                                             {day.getDate()}
                                         </DayNumber>
-                                    </DayCardTop>
-                                    {weekDaysWeather[index]["weather"][0]["main"]}
-                                    <img style={{width:'80px'}} className="weatherIcon" src={cloudyGrey} alt="weatherIcon" />
-                                </DayCard>
+                                        {weekDaysWeather[index]["weather"][0]["main"]}
+                                        <img style={{width:'80px'}} className="weatherIcon" src={cloudyGrey} alt="weatherIcon" />
+                                    </DayCard>
                                 )
                             }
                         }

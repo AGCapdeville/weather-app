@@ -168,7 +168,7 @@ const MainScreen = () => {
                         {
                             if (day == weekDays[1]){
                                 return (
-                                <MainDayCard>
+                                <MainDayCard id="mainDay">
                                     <DayCardTop>
                                         <DayTitle>
                                             {weekdays[day.getDay()]}

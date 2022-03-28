@@ -2,9 +2,9 @@
 import { updateScreen } from '../../../ducks/screen';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { WeekContainer, MainDayCard, DayCard, DayTitle, DayNumber} from "./mainStyle";
+import { WeekContainer, MainDayCard, DayCard, DayTitle, DayNumber, WeatherIcon} from "./mainStyle";
 
-import {cloudyBlack, cloudyGrey} from '../../../images';
+import {cloudyMain, cloudy} from '../../../images';
 
 const { WEATHER_API_KEY } = require('../../../config');
 
@@ -14,26 +14,10 @@ const MainScreen = () => {
     const [latitude, setLatitude] = useState("")
     const [longitude, setLongitude] = useState("")
 
-    
     const [error, setError] = useState(null)
     const [isLoaded, setIsLoaded] = useState(false)
     const [weekDays, setWeekdays] = useState([])
     const [weekDaysWeather, setWeekDaysWeather] = useState([])
-
-    const [weather, setWeather] = useState('')
-    const [location, setLocation] = useState('')
-    const [country, setCountry] = useState('')
-    const [feels, setFeelsLike] = useState('')
-    const [humidity, setHumidity] = useState('')
-
-    // Ridgecrest lat: 35.624947; long: -117.679637;
-    // const latitude =  Math.ceil(Math.random() * 90) * (Math.round(Math.random()) ? 1 : -1)
-    // const longitude =  Math.ceil(Math.random() * 180) * (Math.round(Math.random()) ? 1 : -1)
-
-    // const apiCall = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + WEATHER_API_KEY + '&units=imperial'
-    // const displayScreen = () => {
-    //     dispatch(updateScreen('WeatherToday'))
-    // }
 
     const getDay = (delta) => {
         let date = new Date()
@@ -108,12 +92,6 @@ const MainScreen = () => {
         }
     }
 
-    // const date = new Date();
-    // let month = months[date.getMonth()];
-    // let month_number = date.getMonth();
-    // let prevWeekday = weekdays[date.getDay() - 1 == -1 ? 6 : date.getDay() - 1]
-    // let weekday = weekdays[date.getDay()];
-
     useEffect(() => {
         // setLatitude("35.62");
         // setLongitude("-117.67");
@@ -139,7 +117,6 @@ const MainScreen = () => {
                     console.log(error);
                 }
             )
-
         setWeekdays([getDay(-1), getDay(0), getDay(1), getDay(2), getDay(3), getDay(4), getDay(5)])
     }, [])
 
@@ -162,8 +139,10 @@ const MainScreen = () => {
                                         <DayNumber>
                                             {day.getDate()}
                                         </DayNumber>
-                                        {weekDaysWeather[index]["weather"][0]["main"]}
-                                        <img style={{width:'80px'}} className="weatherIcon" src={cloudyBlack} alt="weatherIcon" />
+                                        {/* {weekDaysWeather[index]["weather"][0]["main"]} */}
+                                        <WeatherIcon>
+                                            <img style={{width:'80px'}} className="weatherIcon" src={cloudyMain} alt="weatherIcon" />
+                                        </WeatherIcon>
                                     </MainDayCard>
                                 )
                             } else {
@@ -175,37 +154,16 @@ const MainScreen = () => {
                                         <DayNumber>
                                             {day.getDate()}
                                         </DayNumber>
-                                        {weekDaysWeather[index]["weather"][0]["main"]}
-                                        <img style={{width:'80px'}} className="weatherIcon" src={cloudyGrey} alt="weatherIcon" />
+                                        {/* {weekDaysWeather[index]["weather"][0]["main"]} */}
+                                        <WeatherIcon>
+                                            <img style={{width:'80px'}} className="weatherIcon" src={cloudy} alt="weatherIcon" />
+                                        </WeatherIcon>
                                     </DayCard>
                                 )
                             }
                         }
                     )}
                 </WeekContainer>
-
-                {/* <div id="weekContainer" style={weekContainer}>
-                    
-                    <div id="prevDay" style={dayStyle}>
-                        <div>
-                            {prevWeekday}
-                        </div>
-                        <div>
-                            {prevDay}
-                        </div>
-                    </div>
-
-                    <div id="today" style={dayStyle}>
-                        <div>
-                            {weekday}
-                        </div>
-                        <div>
-                            {day}
-                        </div>
-                    </div>
-
-                </div> */}
-
             </div>
         );
     }

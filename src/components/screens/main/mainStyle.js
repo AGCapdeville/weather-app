@@ -9,7 +9,7 @@ export const DayCard = styled.div`
     width: 10rem;
     height: 100vh;
     font-weight: bold;
-    color: #a2a2a2;
+    color: hsl(347,17%,42%);
 `;
 
 export const DayCardTop = styled.div`
@@ -19,6 +19,7 @@ export const DayCardTop = styled.div`
 `;
 
 export const DayTitle = styled.div`
+    margin-top: 50px;
     font-size: 1.5rem;
 `;
 
@@ -29,6 +30,9 @@ export const DayNumber = styled.div`
 `;
 
 export const WeatherIcon = styled.div`
+    background-color: hsl(0,0%,17%);
+    border-radius: 15px;
+    padding: 15px;
 `;
 
 export const WeekContainer = styled.div`
@@ -47,5 +51,5 @@ export const MainDayCard = styled.div`
     height: 100vh;
     font-weight: bold;
     background-color: yellow;
-    color: black;
+    color: hsl(14,100%,24%);
 `;

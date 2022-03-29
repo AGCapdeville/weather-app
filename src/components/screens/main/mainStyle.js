@@ -42,6 +42,7 @@ export const MainDayCard = styled.div`
     color: hsl(14,100%,24%);
     padding-left: 1rem;
     padding-right: 1rem;
+    width: 7rem;
 `;
 
 export const DayTitle = styled.div`
@@ -63,12 +64,16 @@ export const WeatherIcon = styled.div`
 `;
 
 export const Month = styled.div`
-    margin-top: 5rem;
-    font-size: 13rem;
-    transform: rotate(10deg);
+    margin-top: 6rem;
+    font-size: 12rem;
+    transform: rotate(25deg);
     color: black;
     @media screen and (min-width: 500px) {
-        margin-top: 4rem;
+        margin-top: 8rem;
     }
 `;
 
+export const Year = styled.div`
+    font-size: 3rem;
+    color: black;
+`;

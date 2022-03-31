@@ -4,7 +4,17 @@ import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { WeekContainer, MainDayCard, DayCard, DayTitle, DayNumber, WeatherIcon, Month, Year} from "./mainStyle";
 
-import {cloudyMain, cloudy} from '../../../images';
+import {
+    clear, clearMain, 
+    rain, rainMain,
+    iceRain, iceRainMain,
+    snow, snowMain,
+    thunderstorm, thunderstormMain,
+    cloudy, cloudyMain,
+    brokenClouds, brokenCloudsMain,
+    cloud, cloudMain,
+    overcast, overcastMain
+} from '../../../images';
 
 const { WEATHER_API_KEY } = require('../../../config');
 
@@ -29,38 +39,93 @@ const MainScreen = () => {
     }
 
     // const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    // const weatherIcons = {
-    //     'Rain' : '🌧',
-    //     "Drizzle" : '🌧',
-    //     'Cloudy' : '☁️',
-    //     'Clear' : '☀️',
-    //     'Cloudy' : '🌤',
-    //     'Thunderstorm' : '⛈',
-    //     'Overcast' : '🌨'
-    // }
-
-    // const idToWeather = (id) => {
-    //     switch (id[0]) {
-    //         case "2":       
-    //             return "Thunderstorm";
-    //         case "3":
-    //             return "Drizzle";
-    //         case "5":
-    //             return "Rain";
-    //         case "6":
-    //             return "Snow";
-    //         case "7":
-    //             // 701:"Mist", 711:"Smoke", 721:"Haze", 731:"Dust", 741:"Fog",
-    //             // 751:"Sand", 761:"Dust", 762:"Ash", 771:"Squall", 781:"Tornado"
-    //             return "Atmosphere";
-    //         case "8":
-    //             return id[2] === "0" ? "Clear" : (id[2] === "1" ? "Cloudy" : "Overcast")
-    //         default:
-    //             return "Unknown"
-    //     }
-    // }
 
 
+    // #a2a2a2 normal
+    // #3783f0 main
+
+    const idToWeatherIcon = (id, isMainDay) => {
+        switch (id) {
+            case 200:
+            case 201:
+            case 202:
+            case 210:
+            case 211:
+            case 212:
+            case 221:
+            case 230:
+            case 231:
+            case 232:
+                return isMainDay ? thunderstormMain : thunderstorm;
+            case 300:
+            case 301:
+            case 302:
+            case 310:
+            case 311:
+            case 312:
+            case 313:
+            case 314:
+            case 321:
+                return isMainDay ? "drizzleMain" : "drizzle";
+            case 500:
+            case 501:
+            case 502:
+            case 503:
+            case 504:
+                return isMainDay ? rainMain : rain;
+            case 511:
+                return isMainDay ? iceRainMain : iceRain;
+            case 520:
+            case 521:
+            case 522:
+            case 531:
+                return isMainDay ? "intenseRainMain" : "intenseRain";
+            case 600:
+            case 601:
+            case 602:
+            case 611:
+            case 612:
+            case 613:
+            case 615:
+            case 616:
+            case 620:
+            case 621:
+            case 622:
+                return isMainDay ? snowMain : snow;
+            case 701:
+                return isMainDay ? "mistMain" : "mist";
+            case 711:
+                return isMainDay ? "smokeMain" : "smoke";
+            case 721:
+                return isMainDay ? "hazeMain" : "haze";
+            case 731:
+                return isMainDay ? "dustWhirlsMain" : "dustWhirls";
+            case 741:
+                return isMainDay ? "fogMain" : "fog";
+            case 751:
+                return isMainDay ? "sandMain" : "sand";
+            case 761:
+                return isMainDay ? "dustMain" : "dust";
+            case 762:
+                return isMainDay ? "ashMain" : "ash";
+            case 771:
+                return isMainDay ? "squallMain" : "squall";
+            case 781:
+                return isMainDay ? "tornadoMain" : "tornado";
+            case 800:
+                return isMainDay ? clearMain : clear;
+            case 801:
+                return isMainDay ? cloudyMain : cloudy;
+            case 802:
+                return isMainDay ? cloudMain : cloud;
+            case 803:
+                return isMainDay ? brokenCloudsMain : brokenClouds;
+            case 804:
+                return isMainDay ? overcastMain : overcast;
+            default:
+                return isMainDay ? "atmosphereMain" : "atmosphere";
+        }
+    }
 
     useEffect(() => {
 
@@ -144,8 +209,13 @@ const MainScreen = () => {
                                         {day.getDate()}
                                     </DayNumber>
                                     <WeatherIcon>
-                                        <img style={{width:"calc(1vw + 4rem)"}} className="weatherIcon" src={cloudyMain} alt="weatherIcon" />
+                                        <img style={{width:"calc(1vw + 4rem)"}} className="weatherIcon" 
+                                            src={
+                                                idToWeatherIcon(weekDaysWeather[index]["weather"][0]["id"], true)
+                                            } alt="weatherIcon" />
                                     </WeatherIcon>
+                                    {console.log(weekDaysWeather[index]["weather"][0]["id"])}
+                                    {weekDaysWeather[index]["weather"][0]["description"]}
                                     <Month>
                                         {day.getMonth() + 1}
                                     </Month>
@@ -163,10 +233,14 @@ const MainScreen = () => {
                                     <DayNumber>
                                         {day.getDate()}
                                     </DayNumber>
-                                    {/* {weekDaysWeather[index]["weather"][0]["main"]} */}
                                     <WeatherIcon>
-                                        <img style={{width:"calc(1vw + 4rem)"}} className="weatherIcon" src={cloudy} alt="weatherIcon" />
+                                        <img style={{width:"calc(1vw + 4rem)"}} className="weatherIcon" 
+                                            src={
+                                                idToWeatherIcon(weekDaysWeather[index]["weather"][0]["id"], false)
+                                            } alt="weatherIcon" />
+                                        {/* <img style={{width:"calc(1vw + 4rem)"}} className="weatherIcon" src={cloudy} alt="weatherIcon" /> */}
                                     </WeatherIcon>
+                                    {weekDaysWeather[index]["weather"][0]["description"]}
                                 </DayCard>
                             )
                         }

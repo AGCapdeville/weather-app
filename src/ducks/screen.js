@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
 export const updateScreen = createAction('screen/UPDATE_SCREEN');
-const initialSreenState = 'Main';
+const initialSreenState = 'Weather';
 
 export default handleActions({
     [updateScreen]: (state, action) => {

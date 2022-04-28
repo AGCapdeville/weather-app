@@ -1,16 +1,16 @@
 import './App.css';
 
 // Screens
-import Main from './components/screens/main';
-import WeatherToday from './components/screens/weatherToday';
+import Weather from './components/screens/weather';
+import Sources from './components/screens/sources';
 import { useScreen } from './ducks/screen';
 
 const screens : any = {
-  Main,
-  WeatherToday
+  Weather,
+  Sources,
 }
 
-function App() {
+const App = () => {
   const screen = useScreen();
   const Screen = screens[screen];
   return (

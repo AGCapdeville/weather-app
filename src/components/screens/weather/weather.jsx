@@ -19,6 +19,8 @@ import {
   WeatherContainer,
   LocationContainer,
   Location,
+  SideBar,
+  PersonaScreen,
 } from "./weatherStyle";
 import {
   sun,
@@ -73,6 +75,8 @@ const PersonaWeather = () => {
   const [city, setCity] = useState("");
   const [town, setTown] = useState("");
   const [state, setState] = useState("");
+
+  const [selectedDay, setSelectedDay] = useState(1);
 
   // #a2a2a2 normal
   // #3783f0 main
@@ -277,17 +281,23 @@ const PersonaWeather = () => {
     }
   };
 
-  function moveSelectedToMe(e, index) {
+  const moveSelectedToMe = (index) => {
     let selected = document.getElementById("selected");
     selected.style.marginLeft =
       "max(" + index * 10 + "vw," + index * 100 + "px)";
     selected.style.marginRight = index * -100 + "px";
-  }
+
+    document.getElementById(index + "month").style.display = "block";
+    document.getElementById(index + "year").style.display = "block";
+
+    document.getElementById(selectedDay + "month").style.display = "none";
+    document.getElementById(selectedDay + "year").style.display = "none";
+    setSelectedDay(index);
+  };
 
   useEffect(() => {
     pupulateWeekWeather();
     locateUser(latitude, longitude);
-    // followMouse();
   }, [latitude, longitude]);
 
   if (error) {
@@ -301,11 +311,8 @@ const PersonaWeather = () => {
           <div>{state}</div>
           <div>{city}</div>
           <div>{town}</div>
-          <div
-            onClick={(event) => getGeolocation(event)}
-            style={{ position: "absolute", right: 2, top: 7 }}
-          >
-            <Location></Location>
+          <div style={{ position: "absolute", right: 2, top: 7 }}>
+            <Location onClick={(event) => getGeolocation(event)}></Location>
           </div>
         </LocationContainer>
         <SourceContainer>
@@ -313,35 +320,74 @@ const PersonaWeather = () => {
             sources
           </SourceButton>
         </SourceContainer>
-        <WeatherContainer>
-          <SelectedBar id="selected"></SelectedBar>
-          <WeekContainer>
-            {weekDays.map((day, index) => {
-              return (
-                <DayCard id={index} onClick={(e) => moveSelectedToMe(e, index)}>
-                  <DayTitle>{weekdays[day.getDay()]}</DayTitle>
-                  <DayNumber>{day.getDate()}</DayNumber>
-                  <WeatherIcon>
-                    <Icon
-                      src={idToWeatherIcon(
-                        weekDaysWeather[index]["weather"][0]["id"],
-                        true
-                      )}
-                      alt="weatherIcon"
-                    />
-                  </WeatherIcon>
-                  <Description>
-                    {weekDaysWeather[index]["weather"][0]["description"]}
-                  </Description>
-                  <MonthContainer>
-                    <Month>{day.getMonth() + 1}</Month>
-                  </MonthContainer>
-                  <Year>{day.getFullYear()}</Year>
-                </DayCard>
-              );
-            })}
-          </WeekContainer>
-        </WeatherContainer>
+        <PersonaScreen>
+          <SideBar id="leftSide"></SideBar>
+          <WeatherContainer>
+            <SelectedBar id="selected"></SelectedBar>
+            <WeekContainer>
+              {weekDays.map((day, index) => {
+                if (index === 1) {
+                  return (
+                    <DayCard
+                      id={index}
+                      onClick={(e) => moveSelectedToMe(index)}
+                    >
+                      <DayTitle>{weekdays[day.getDay()]}</DayTitle>
+                      <DayNumber>{day.getDate()}</DayNumber>
+                      <WeatherIcon>
+                        <Icon
+                          src={idToWeatherIcon(
+                            weekDaysWeather[index]["weather"][0]["id"],
+                            true
+                          )}
+                          alt="weatherIcon"
+                        />
+                      </WeatherIcon>
+                      <Description id={index + "description"}>
+                        {weekDaysWeather[index]["weather"][0]["description"]}
+                      </Description>
+                      <MonthContainer id={index + "month"}>
+                        <Month>{day.getMonth() + 1}</Month>
+                      </MonthContainer>
+                      <Year id={index + "year"}>{day.getFullYear()}</Year>
+                    </DayCard>
+                  );
+                } else {
+                  return (
+                    <DayCard
+                      id={index}
+                      onClick={(e) => moveSelectedToMe(index)}
+                    >
+                      <DayTitle>{weekdays[day.getDay()]}</DayTitle>
+                      <DayNumber>{day.getDate()}</DayNumber>
+                      <WeatherIcon>
+                        <Icon
+                          src={idToWeatherIcon(
+                            weekDaysWeather[index]["weather"][0]["id"],
+                            true
+                          )}
+                          alt="weatherIcon"
+                        />
+                      </WeatherIcon>
+                      <Description id={index + "description"}>
+                        {weekDaysWeather[index]["weather"][0]["description"]}
+                      </Description>
+                      <MonthContainer
+                        style={{ display: "none" }}
+                        id={index + "month"}
+                      >
+                        <Month>{day.getMonth() + 1}</Month>
+                      </MonthContainer>
+                      <Year style={{ display: "none" }} id={index + "year"}>
+                        {day.getFullYear()}
+                      </Year>
+                    </DayCard>
+                  );
+                }
+              })}
+            </WeekContainer>
+          </WeatherContainer>
+        </PersonaScreen>
       </>
     );
   }

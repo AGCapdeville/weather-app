@@ -51,13 +51,13 @@ export const SourceButton = styled.button`
 `;
 
 export const WeatherContainer = styled.div`
-    // position: absolute;
+    position: absolute;
     display: flex;
     width: 100%;
-    // height: 100%;
+    height: 100%;
     overflow-y: hidden;
-    // background: radial-gradient(circle closest-side at top, #30302F, #000000);
-    z-index: 1;
+    background: radial-gradient(circle closest-side at top, #30302F, #000000);
+    z-index: -1;
 `;
 
 export const WeekContainer = styled.div`
@@ -67,8 +67,7 @@ export const WeekContainer = styled.div`
     font-weight: bold;
     @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@0;1&display=swap'); 
     font-family: 'Roboto', sans-serif;
-    // z-index: 1;
-    background: black;
+    z-index: -1;
 `;
 
 export const Icon = styled.img`
@@ -102,7 +101,7 @@ export const SelectedBar = styled.div`
     margin-left: max(10vw, 100px);
     background-color: #ffff01;
     transition: all 0.5s ease-out;
-    z-index: 1;
+    z-index: -1;
 `;
 
 export const WeatherIcon = styled.div`
@@ -158,15 +157,6 @@ export const Description = styled.div`
     height: 100px;
 `;
 
-export const SideBar = styled.div`
-    height: 100vh;
-    @media(min-width: 600px) {
-        width: 15vw;
-    }
-`
-export const PersonaScreen = styled.div`
-    display: flex;
-`
 // export const DayCard = styled.div`
 //     display: flex;
 //     flex-direction: column;

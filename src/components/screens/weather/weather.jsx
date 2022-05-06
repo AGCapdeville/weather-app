@@ -320,74 +320,65 @@ const PersonaWeather = () => {
             sources
           </SourceButton>
         </SourceContainer>
-        <PersonaScreen>
-          <SideBar id="leftSide"></SideBar>
-          <WeatherContainer>
-            <SelectedBar id="selected"></SelectedBar>
-            <WeekContainer>
-              {weekDays.map((day, index) => {
-                if (index === 1) {
-                  return (
-                    <DayCard
-                      id={index}
-                      onClick={(e) => moveSelectedToMe(index)}
+        <WeatherContainer>
+          <SelectedBar id="selected"></SelectedBar>
+          <WeekContainer>
+            {weekDays.map((day, index) => {
+              if (index === 1) {
+                return (
+                  <DayCard id={index} onClick={(e) => moveSelectedToMe(index)}>
+                    <DayTitle>{weekdays[day.getDay()]}</DayTitle>
+                    <DayNumber>{day.getDate()}</DayNumber>
+                    <WeatherIcon>
+                      <Icon
+                        src={idToWeatherIcon(
+                          weekDaysWeather[index]["weather"][0]["id"],
+                          true
+                        )}
+                        alt="weatherIcon"
+                      />
+                    </WeatherIcon>
+                    <Description id={index + "description"}>
+                      {weekDaysWeather[index]["weather"][0]["description"]}
+                    </Description>
+                    <MonthContainer id={index + "month"}>
+                      <Month>{day.getMonth() + 1}</Month>
+                    </MonthContainer>
+                    <Year id={index + "year"}>{day.getFullYear()}</Year>
+                  </DayCard>
+                );
+              } else {
+                return (
+                  <DayCard id={index} onClick={(e) => moveSelectedToMe(index)}>
+                    <DayTitle>{weekdays[day.getDay()]}</DayTitle>
+                    <DayNumber>{day.getDate()}</DayNumber>
+                    <WeatherIcon>
+                      <Icon
+                        src={idToWeatherIcon(
+                          weekDaysWeather[index]["weather"][0]["id"],
+                          true
+                        )}
+                        alt="weatherIcon"
+                      />
+                    </WeatherIcon>
+                    <Description id={index + "description"}>
+                      {weekDaysWeather[index]["weather"][0]["description"]}
+                    </Description>
+                    <MonthContainer
+                      style={{ display: "none" }}
+                      id={index + "month"}
                     >
-                      <DayTitle>{weekdays[day.getDay()]}</DayTitle>
-                      <DayNumber>{day.getDate()}</DayNumber>
-                      <WeatherIcon>
-                        <Icon
-                          src={idToWeatherIcon(
-                            weekDaysWeather[index]["weather"][0]["id"],
-                            true
-                          )}
-                          alt="weatherIcon"
-                        />
-                      </WeatherIcon>
-                      <Description id={index + "description"}>
-                        {weekDaysWeather[index]["weather"][0]["description"]}
-                      </Description>
-                      <MonthContainer id={index + "month"}>
-                        <Month>{day.getMonth() + 1}</Month>
-                      </MonthContainer>
-                      <Year id={index + "year"}>{day.getFullYear()}</Year>
-                    </DayCard>
-                  );
-                } else {
-                  return (
-                    <DayCard
-                      id={index}
-                      onClick={(e) => moveSelectedToMe(index)}
-                    >
-                      <DayTitle>{weekdays[day.getDay()]}</DayTitle>
-                      <DayNumber>{day.getDate()}</DayNumber>
-                      <WeatherIcon>
-                        <Icon
-                          src={idToWeatherIcon(
-                            weekDaysWeather[index]["weather"][0]["id"],
-                            true
-                          )}
-                          alt="weatherIcon"
-                        />
-                      </WeatherIcon>
-                      <Description id={index + "description"}>
-                        {weekDaysWeather[index]["weather"][0]["description"]}
-                      </Description>
-                      <MonthContainer
-                        style={{ display: "none" }}
-                        id={index + "month"}
-                      >
-                        <Month>{day.getMonth() + 1}</Month>
-                      </MonthContainer>
-                      <Year style={{ display: "none" }} id={index + "year"}>
-                        {day.getFullYear()}
-                      </Year>
-                    </DayCard>
-                  );
-                }
-              })}
-            </WeekContainer>
-          </WeatherContainer>
-        </PersonaScreen>
+                      <Month>{day.getMonth() + 1}</Month>
+                    </MonthContainer>
+                    <Year style={{ display: "none" }} id={index + "year"}>
+                      {day.getFullYear()}
+                    </Year>
+                  </DayCard>
+                );
+              }
+            })}
+          </WeekContainer>
+        </WeatherContainer>
       </>
     );
   }
